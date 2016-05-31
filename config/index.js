@@ -1,4 +1,5 @@
 require('dotenv').config({path: __dirname +'/../.env'});
+var worker = require('./worker');  
 
 module.exports = {
     app: {
@@ -9,5 +10,6 @@ module.exports = {
         user    : process.env.GMBOT_DB_USER || 'your_database_user',
         password: process.env.GMBOT_DB_PSWD || 'your_database_password',
         database: process.env.GMBOT_DB_NAME || 'myapp_test'
-    }
+    },
+    worker: worker
 }; 
