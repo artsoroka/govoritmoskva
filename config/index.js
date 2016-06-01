@@ -4,7 +4,8 @@ var worker = require('./worker');
 
 module.exports = {
     app: {
-        port: 8080
+        hostname: process.env.GMBOT_HOSTNAME || 'bot_public_url', 
+        port: process.env.GMBOT_PORT         || 8080
     }, 
     db: {
         host    : process.env.GMBOT_DB_HOST || 'localhost',
@@ -13,5 +14,8 @@ module.exports = {
         database: process.env.GMBOT_DB_NAME || 'myapp_test'
     },
     logger: logger, 
-    worker: worker
+    worker: worker,
+    telegram: {
+        token: process.env.GMBOT_TG_TOKEN || 'telegram_token' 
+    }
 }; 
