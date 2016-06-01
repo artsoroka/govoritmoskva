@@ -10,10 +10,12 @@ setWebhook(webhookUrl, function(response){
         var success = response.ok || false; 
         
         if( ! success ){
-            logger.error('Could not set webhook', success); 
+            logger.error('Could not set webhook', response); 
             process.exit(1); 
         }
-        
-        process.exit(0);
-        
+        setTimeout(function(){
+            // let winston-papertrail send log 
+            process.exit(0);    
+        }, 1000); 
+    
 }); 
