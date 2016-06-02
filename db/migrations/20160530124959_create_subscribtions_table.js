@@ -6,6 +6,7 @@ exports.up = function(knex, Promise) {
 
             table.increments(); 
             table.integer('chat_id').unsigned();
+            table.string('type', 15); 
             table.string('action', 12); // subscribe | unsibscribe 
             table.string('first_name', 100);
             table.string('last_name', 100); 
