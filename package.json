@@ -6,15 +6,15 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "db:migrations": "knex --cwd ./db migrate:latest",
-    "prestart": "npm run db:migrations", 
+    "prestart": "npm run db:migrations",
     "start": "pm2 start --name=gmbot ./bin/www",
     "watch": "pm2 start --name=gmbot ./bin/www --watch",
-    "status": "pm2 show gmbot", 
-    "status:all": "pm2 status", 
-    "logs": "pm2 logs gmbot", 
+    "status": "pm2 show gmbot",
+    "status:all": "pm2 status",
+    "logs": "pm2 logs gmbot",
     "stop": "pm2 stop gmbot",
     "delete": "npm run stop && pm2 delete gmbot",
-    "webhook:set": "node ./init/registerWebhook.js", 
+    "webhook:set": "node ./init/registerWebhook.js",
     "webhook:remove": "node ./init/removeWebhook.js"
   },
   "repository": {
@@ -39,6 +39,7 @@
     "body-parser": "^1.15.1",
     "cheerio": "^0.20.0",
     "dotenv": "^2.0.0",
+    "ejs": "^2.4.2",
     "express": "^4.13.4",
     "knex": "^0.11.5",
     "lodash": "^4.13.1",
