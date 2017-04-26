@@ -34,12 +34,9 @@ Telegram.prototype.makeRequest = function(method, payload){
 }; 
 
 Telegram.prototype.sendMessage = function(data){
-    var self = this; 
-    return new Promise(function(resolve, reject){
-        return self.makeRequest('sendMessage', {
-            chat_id: data.chatId, 
-            text   : data.text
-        }); 
+    return this.makeRequest('sendMessage', {
+        chat_id: data.chatId, 
+        text   : data.text
     }); 
 }; 
 
