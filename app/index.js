@@ -9,6 +9,8 @@ var chatbot    = require('./chatbot');
 var newsFeed   = require('./workers/newsWatcher'); 
 var config     = require('../config'); 
 
+var Promise    = require('bluebird'); 
+
 app.use(bodyParser.json()); 
 
 app.all('*', function(req, res){
@@ -104,17 +106,41 @@ newsFeed.on('news', function(news){
               var subscribers = rows.map(function(row){
                   return row.chat_id; 
               }); 
-
-              subscribers.map(function(chatId){
+              console.log('Starting sending messages to ', subscribers.length); 
+              var timeStart = Date.now(); 
+              Promise
+                .map(
+                  subscribers, 
+                  (chatId) => {
+                    return new Promise((res, rej) => {
+                      telegram
+                        .sendMessage({
+                          chatId: chatId,  
+                          text  : [news.title, news.url.replace('http://', 'https://')].join('')
+                        })
+                        .then(function(data){
+                          res({chatId: chatId, status: 'delivered'});     
+                        })
+                        .catch((err) => {
+                            res({chatId: chatId, status: 'failed'}); 
+                        }); 
                           
-                telegram.sendMessage({
-                    chatId: chatId,  
-                    text  : [news.title, news.url.replace('http://', 'https://')].join('')
-                }).catch(function(err){
-                    logger.warn('telegram message error', err); 
+                      }); 
+                    }, 
+                    {concurrency: 10}
+                )
+                .then((result) => {
+                    var timeTaken = (Date.now() - timeStart) / 1000; 
+                    console.log('Messages sent, time taken ', timeTaken); 
+                    var sentMsgs = result.reduce((acc, msg) => {
+                            acc[msg.status].push(msg.chatId); 
+                            return acc; 
+                        }, {delivered: [], failed: []}); 
+                    if( sentMsgs.failed.length ){
+                        console.log('failed to deliver messages to', sentMsgs.failed.join(',')); 
+                    }
                 }); 
-                
-              });  
+              
           }); 
  
     }); 
