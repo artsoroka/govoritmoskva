@@ -21,7 +21,7 @@ Telegram.prototype.makeRequest = function(method, payload){
         }, function(err, response, body){
             if( err ){
                 logger.error('Telegram api request failed with error', err); 
-                reject(err); 
+                return reject(err); 
             }
             
             var data = JSON.parse(body); 
