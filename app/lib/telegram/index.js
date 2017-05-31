@@ -24,7 +24,14 @@ Telegram.prototype.makeRequest = function(method, payload){
                 return reject(err); 
             }
             
-            var data = JSON.parse(body); 
+            var data = null; 
+            try {
+                data = JSON.parse(body);     
+            } catch(e) {
+                logger.error('Telegram api response contains invalid JSON string', body); 
+                return reject('Got invalid JSON response'); 
+            }
+            
             resolve(data); 
             
         }); 
